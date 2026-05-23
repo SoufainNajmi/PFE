@@ -5,9 +5,11 @@
 
 
  .hero-section{
-        background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bWFya2V0fGVufDB8fDB8fHww&auto=format&fit=crop&w=800&q=60');
+        /* Image uploadée comme background avec un effet d'overlay */
+        background: linear-gradient(to bottom, rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.6)), url('{{ asset("asset/image/photo1.png") }}');
         background-size: cover;
         background-position: center;
+        background-attachment: fixed;
  }
     /* ========== ANIMATIONS & KEYFRAMES ========== */
     @keyframes fadeInUp {
@@ -319,6 +321,35 @@
             scroll-behavior: auto !important;
         }
     }
+
+    /* Floating Admin Shape */
+    .admin-float-btn {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 65px;
+        height: 65px;
+        background: rgba(30, 41, 59, 0.7);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(139, 92, 246, 0.4);
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.8rem;
+        z-index: 999;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 0 15px rgba(139, 92, 246, 0.2);
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        text-decoration: none;
+    }
+
+    .admin-float-btn:hover {
+        transform: translateY(-8px) rotate(8deg);
+        box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.6), 0 0 30px rgba(139, 92, 246, 0.5);
+        border-color: rgba(139, 92, 246, 0.9);
+        background: rgba(30, 41, 59, 0.9);
+    }
 </style>
 
 <!-- Decorative Background Elements -->
@@ -387,6 +418,11 @@
     <p style="color: var(--text-muted); margin-bottom: 2rem; font-size: 1.1rem;">Rejoignez des centaines de professionnels qui utilisent déjà Hanoti au quotidien.</p>
     <a href="/register" class="btn" style="font-size: 1.1rem; padding: 1rem 2.5rem; border-radius: 3rem; background: linear-gradient(135deg, #8b5cf6, #ec4899);">Créer mon compte maintenant 🚀</a>
 </section>
+
+<!-- Forme pour l'accès Admin -->
+<a href="{{ auth()->check() && auth()->user()->role === 'admin' ? '/admin/dashboard' : '/login' }}" class="admin-float-btn" title="Accès Dashboard Admin">
+    🛡️
+</a>
 
 <script>
     // Révélation au scroll (Intersection Observer)
