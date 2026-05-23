@@ -18,6 +18,7 @@
                     <th>Produits</th>
                     <th>Total</th>
                     <th>Statut</th>
+                    <th>Facture</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -46,6 +47,15 @@
                             <span class="badge badge-approved">Terminée</span>
                         @elseif($order->status === 'cancelled')
                             <span class="badge badge-rejected">Annulée</span>
+                        @endif
+                    </td>
+                    <td>
+                        @if($order->invoice)
+                            <a href="#" class="btn" style="padding: 0.25rem 0.5rem; font-size: 0.8rem; background: var(--secondary);" title="N° {{ $order->invoice->invoice_number }}">📄 Voir la facture</a>
+                        @elseif($order->status === 'completed')
+                            <span style="font-size: 0.8rem; color: var(--text-muted);">En génération...</span>
+                        @else
+                            <span style="font-size: 0.8rem; color: var(--text-muted);">-</span>
                         @endif
                     </td>
                     <td>
