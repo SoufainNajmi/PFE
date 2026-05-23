@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
         \App\Models\User::factory()->create([
             'name' => 'Admin Hanoti',
             'email' => 'admin@hanoti.com',
-            'password' => \Illuminate\Support\Facades\Hash::make('password'),
+            'password' => '123456789', // Pas besoin de Hash::make car le modèle User s'en charge avec 'casts'
             'role' => 'admin',
             'status' => 'approved',
         ]);
@@ -33,7 +33,7 @@ class DatabaseSeeder extends Seeder
             'Entretien et Hygiène'
         ];
 
-        foreach($categories as $category) {
+        foreach ($categories as $category) {
             \App\Models\Category::create([
                 'name' => $category,
                 'description' => 'Produits de la catégorie ' . $category
