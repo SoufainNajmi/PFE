@@ -17,6 +17,44 @@
     </div>
 </div>
 
+@if($pendingOrders && $pendingOrders->count() > 0)
+<div class="glass-panel" style="margin-bottom: 2rem; border-left: 4px solid var(--primary);">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h3 style="margin: 0; display: flex; align-items: center; gap: 0.5rem;">
+            🔔 Nouvelles commandes à valider
+            <span class="badge badge-pending">{{ $pendingOrders->count() }}</span>
+        </h3>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 1rem;">
+        @foreach($pendingOrders as $order)
+        <div style="background: rgba(255, 255, 255, 0.03); border-radius: 0.5rem; padding: 1rem; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255, 255, 255, 0.05);">
+            <div>
+                <strong style="font-size: 1.1rem; color: var(--primary);">Commande #{{ str_pad($order->id, 5, '0', STR_PAD_LEFT) }}</strong>
+                <p style="margin: 0.25rem 0 0 0; font-size: 0.9rem; color: var(--text-muted);">
+                    Reçue de <strong>{{ $order->client->name }}</strong> le {{ $order->created_at->format('d/m/Y H:i') }}
+                </p>
+                <div style="margin-top: 0.5rem; font-size: 0.85rem;">
+                    @foreach($order->items as $item)
+                        @if($item->product && $item->product->fournisseur_id == auth()->id())
+                            <span style="background: rgba(255,255,255,0.1); padding: 0.1rem 0.4rem; border-radius: 0.25rem; margin-right: 0.25rem;">{{ $item->quantity }}x {{ $item->product->name }}</span>
+                        @endif
+                    @endforeach
+                </div>
+            </div>
+            <div style="text-align: right; min-width: 150px;">
+                <div style="font-weight: bold; margin-bottom: 0.5rem; font-size: 1.1rem;">{{ number_format($order->total_price, 2) }} DH</div>
+                <form action="{{ route('fournisseur.orders.status', $order->id) }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="status" value="processing">
+                    <button type="submit" class="btn" style="background: var(--success); border: none; padding: 0.5rem 1rem; width: 100%;">Valider la commande ✓</button>
+                </form>
+            </div>
+        </div>
+        @endforeach
+    </div>
+</div>
+@endif
+
 <div class="glass-panel" style="margin-bottom: 2rem;">
     <h3>Mes Derniers Produits</h3>
     @if($recentProducts->isEmpty())
