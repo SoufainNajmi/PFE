@@ -21,7 +21,16 @@ class FournisseurController extends Controller
 
         $recentProducts = Product::where('fournisseur_id', Auth::id())->latest()->take(5)->get();
 
-        return view('fournisseur.dashboard', compact('productsCount', 'ordersCount', 'recentProducts'));
+        $pendingOrders = Order::whereHas('items', function($query) {
+            $query->whereHas('product', function($q) {
+                $q->where('fournisseur_id', Auth::id());
+            });
+        })->where('status', 'pending')
+          ->with(['client', 'items.product'])
+          ->latest()
+          ->get();
+
+        return view('fournisseur.dashboard', compact('productsCount', 'ordersCount', 'recentProducts', 'pendingOrders'));
     }
 
     public function orders()
@@ -30,7 +39,7 @@ class FournisseurController extends Controller
             $query->whereHas('product', function($q) {
                 $q->where('fournisseur_id', Auth::id());
             });
-        })->with(['client', 'items.product'])->latest()->get();
+        })->with(['client', 'items.product', 'invoice'])->latest()->get();
 
         return view('fournisseur.orders', compact('orders'));
     }
