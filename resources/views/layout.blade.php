@@ -10,7 +10,10 @@
 <body>
     <header>
         <div class="logo">
-            <a href="/">Hanoti.</a>
+            <a href="/" style="display: flex; align-items: center; gap: 0.5rem; text-decoration: none;">
+                <img src="{{ asset('asset/image/logo.png') }}" alt="Logo" style="width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary);">
+                Hanoti.
+            </a>
         </div>
         <nav>
             <ul>
