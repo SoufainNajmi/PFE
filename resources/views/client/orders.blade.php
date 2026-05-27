@@ -39,7 +39,7 @@
                     </td>
                     <td>
                         @if($order->invoice)
-                            <span style="color: var(--text-muted); font-size: 0.875rem;">{{ $order->invoice->invoice_number }}</span>
+                            <a href="{{ route('client.orders.invoice', $order->id) }}" class="btn" style="padding: 0.25rem 0.5rem; font-size: 0.8rem; background: var(--secondary);" title="Télécharger facture">📄 PDF ({{ $order->invoice->invoice_number }})</a>
                         @else
                             -
                         @endif
