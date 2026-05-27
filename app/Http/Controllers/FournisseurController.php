@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\Order;
 use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class FournisseurController extends Controller
 {
@@ -62,5 +63,32 @@ class FournisseurController extends Controller
         }
 
         return back()->with('success', 'Statut de la commande mis à jour.');
+    }
+
+    public function downloadInvoice($id)
+    {
+        $order = Order::whereHas('items', function($query) {
+            $query->whereHas('product', function($q) {
+                $q->where('fournisseur_id', Auth::id());
+            });
+        })->with(['client', 'items.product', 'invoice'])->findOrFail($id);
+
+        if (!$order->invoice) {
+            return back()->with('error', 'Facture non disponible.');
+        }
+
+        $pdf = Pdf::loadView('invoices.pdf', compact('order'));
+        return $pdf->download('facture_' . $order->invoice->invoice_number . '.pdf');
+    }
+
+    public function invoices()
+    {
+        $orders = Order::whereHas('items', function($query) {
+            $query->whereHas('product', function($q) {
+                $q->where('fournisseur_id', Auth::id());
+            });
+        })->whereHas('invoice')->with(['client', 'invoice'])->latest()->get();
+
+        return view('fournisseur.invoices', compact('orders'));
     }
 }

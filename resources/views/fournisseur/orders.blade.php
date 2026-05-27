@@ -51,7 +51,7 @@
                     </td>
                     <td>
                         @if($order->invoice)
-                            <a href="#" class="btn" style="padding: 0.25rem 0.5rem; font-size: 0.8rem; background: var(--secondary);" title="N° {{ $order->invoice->invoice_number }}">📄 Voir la facture</a>
+                            <a href="{{ route('fournisseur.orders.invoice', $order->id) }}" class="btn" style="padding: 0.25rem 0.5rem; font-size: 0.8rem; background: var(--secondary);" title="N° {{ $order->invoice->invoice_number }}">📄 Télécharger PDF</a>
                         @elseif($order->status === 'completed')
                             <span style="font-size: 0.8rem; color: var(--text-muted);">En génération...</span>
                         @else

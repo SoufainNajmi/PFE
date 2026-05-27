@@ -37,6 +37,8 @@ Route::middleware(['auth', 'role:fournisseur'])->prefix('fournisseur')->group(fu
     Route::resource('products', ProductController::class)->except(['index', 'show']);
     Route::get('/orders', [FournisseurController::class, 'orders'])->name('fournisseur.orders');
     Route::post('/orders/{id}/status', [FournisseurController::class, 'updateOrderStatus'])->name('fournisseur.orders.status');
+    Route::get('/orders/{id}/invoice', [FournisseurController::class, 'downloadInvoice'])->name('fournisseur.orders.invoice');
+    Route::get('/invoices', [FournisseurController::class, 'invoices'])->name('fournisseur.invoices');
 });
 
 // Client Routes
@@ -44,6 +46,8 @@ Route::middleware(['auth', 'role:client'])->prefix('client')->group(function () 
     Route::get('/orders', [ClientController::class, 'orders'])->name('client.orders');
     Route::get('/order/create', [ClientController::class, 'createOrder'])->name('client.order.create');
     Route::post('/order/store', [ClientController::class, 'storeOrder'])->name('client.order.store');
+    Route::get('/orders/{id}/invoice', [ClientController::class, 'downloadInvoice'])->name('client.orders.invoice');
+    Route::get('/invoices', [ClientController::class, 'invoices'])->name('client.invoices');
     
     // The previous cart routes are still here but we might deprecate them or keep them.
     // We will keep them just in case.

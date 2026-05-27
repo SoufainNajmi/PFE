@@ -8,6 +8,7 @@ use App\Models\OrderItem;
 use App\Models\User;
 use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ClientController extends Controller
 {
@@ -78,5 +79,27 @@ class ClientController extends Controller
         }
 
         return redirect()->route('client.orders')->with('success', 'Commande passée avec succès auprès du fournisseur!');
+    }
+
+    public function downloadInvoice($id)
+    {
+        $order = Order::with(['client', 'items.product', 'invoice'])->findOrFail($id);
+
+        if ($order->client_id !== Auth::id()) {
+            abort(403);
+        }
+
+        if (!$order->invoice) {
+            return back()->with('error', 'Facture non disponible.');
+        }
+
+        $pdf = Pdf::loadView('invoices.pdf', compact('order'));
+        return $pdf->download('facture_' . $order->invoice->invoice_number . '.pdf');
+    }
+
+    public function invoices()
+    {
+        $orders = Order::where('client_id', Auth::id())->whereHas('invoice')->with(['invoice'])->latest()->get();
+        return view('client.invoices', compact('orders'));
     }
 }
