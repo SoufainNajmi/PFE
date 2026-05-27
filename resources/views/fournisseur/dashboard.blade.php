@@ -11,9 +11,10 @@
         <h4 style="color: var(--text-muted); margin-bottom: 0.5rem;">Mes Produits</h4>
         <h2 style="font-size: 2.5rem; color: var(--primary);">{{ $productsCount }}</h2>
     </div>
-    <div class="glass-panel" style="padding: 1.5rem;">
+    <div class="glass-panel" style="padding: 1.5rem; position: relative;">
         <h4 style="color: var(--text-muted); margin-bottom: 0.5rem;">Commandes Reçues</h4>
         <h2 style="font-size: 2.5rem; color: var(--success);">{{ $ordersCount }}</h2>
+        <a href="{{ route('fournisseur.orders') }}" class="btn" style="position: absolute; right: 1.5rem; top: 1.5rem; background: var(--secondary); padding: 0.5rem 1rem;">Voir l'historique</a>
     </div>
 </div>
 
