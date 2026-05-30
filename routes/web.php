@@ -8,6 +8,7 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\SupportTicketController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -29,6 +30,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::post('/fournisseurs/{id}/approve', [AdminController::class, 'approveFournisseur'])->name('admin.fournisseurs.approve');
     Route::post('/fournisseurs/{id}/reject', [AdminController::class, 'rejectFournisseur'])->name('admin.fournisseurs.reject');
+    Route::get('/support', [SupportTicketController::class, 'index'])->name('admin.support');
+    Route::post('/support/{id}/resolve', [SupportTicketController::class, 'resolve'])->name('admin.support.resolve');
 });
 
 // Fournisseur Routes
@@ -56,4 +59,10 @@ Route::middleware(['auth', 'role:client'])->prefix('client')->group(function () 
     Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
     Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
     Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+});
+
+// Support Routes (for all authenticated users except maybe admin, but auth is fine)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/support/create', [SupportTicketController::class, 'create'])->name('support.create');
+    Route::post('/support', [SupportTicketController::class, 'store'])->name('support.store');
 });
