@@ -21,7 +21,12 @@
 
 @if($selectedFournisseur)
     <div class="glass-panel">
-        <h3 style="margin-bottom: 1.5rem;">Produits de {{ $selectedFournisseur->name }}</h3>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h3>Produits de {{ $selectedFournisseur->name }}</h3>
+            @if(!$products->isEmpty())
+                <input type="text" id="searchInput" placeholder="Rechercher un produit..." class="form-input" style="max-width: 300px;" onkeyup="filterProducts()">
+            @endif
+        </div>
         
         @if($products->isEmpty())
             <p style="color: var(--text-muted); text-align: center;">Ce fournisseur n'a pas encore de produits.</p>
@@ -30,7 +35,7 @@
                 @csrf
                 <input type="hidden" name="fournisseur_id" value="{{ $selectedFournisseur->id }}">
                 
-                <table>
+                <table id="productsTable">
                     <thead>
                         <tr>
                             <th>Produit</th>
@@ -60,6 +65,26 @@
                     <button type="submit" class="btn">Confirmer la Commande</button>
                 </div>
             </form>
+
+            <script>
+                function filterProducts() {
+                    const input = document.getElementById('searchInput').value.toLowerCase();
+                    const table = document.getElementById('productsTable');
+                    const trs = table.getElementsByTagName('tr');
+
+                    for (let i = 1; i < trs.length; i++) {
+                        const td = trs[i].getElementsByTagName('td')[0];
+                        if (td) {
+                            const txtValue = td.textContent || td.innerText;
+                            if (txtValue.toLowerCase().indexOf(input) > -1) {
+                                trs[i].style.display = "";
+                            } else {
+                                trs[i].style.display = "none";
+                            }
+                        }       
+                    }
+                }
+            </script>
         @endif
     </div>
 @endif
