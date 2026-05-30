@@ -3,15 +3,18 @@
 @section('content')
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
     <h2>Nos Produits</h2>
+    @if(!$products->isEmpty())
+        <input type="text" id="searchInput" placeholder="Rechercher un produit..." class="form-input" style="max-width: 300px;" onkeyup="filterProducts()">
+    @endif
 </div>
 
-<div class="grid">
+<div class="grid" id="productsGrid">
     @forelse($products as $product)
-    <div class="card animate-fade-in">
+    <div class="card animate-fade-in product-card">
         <img src="{{ $product->image ? asset('storage/'.$product->image) : 'https://placehold.co/600x400/1e293b/ffffff?text=Produit' }}" alt="{{ $product->name }}">
         <div class="card-body">
             <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
-                <h3 style="margin-bottom: 0;">{{ $product->name }}</h3>
+                <h3 class="product-title" style="margin-bottom: 0;">{{ $product->name }}</h3>
                 <span style="font-weight: bold; color: var(--success); font-size: 1.25rem;">{{ number_format($product->price, 2) }} DH</span>
             </div>
             <p style="color: var(--text-muted); margin-bottom: 1rem; font-size: 0.875rem;">
@@ -40,4 +43,23 @@
     </div>
     @endforelse
 </div>
+
+<script>
+    function filterProducts() {
+        const input = document.getElementById('searchInput').value.toLowerCase();
+        const cards = document.getElementsByClassName('product-card');
+
+        for (let i = 0; i < cards.length; i++) {
+            const title = cards[i].querySelector('.product-title');
+            if (title) {
+                const txtValue = title.textContent || title.innerText;
+                if (txtValue.toLowerCase().indexOf(input) > -1) {
+                    cards[i].style.display = "";
+                } else {
+                    cards[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
 @endsection
