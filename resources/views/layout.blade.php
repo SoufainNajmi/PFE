@@ -22,14 +22,17 @@
                 @auth
                     @if(auth()->user()->role === 'admin')
                         <li><a href="/admin/dashboard">Tableau de Bord Admin</a></li>
+                        <li><a href="{{ route('admin.support') }}">Messages Support</a></li>
                     @elseif(auth()->user()->role === 'fournisseur')
                         <li><a href="/fournisseur/dashboard">Mon Espace Fournisseur</a></li>
                         <li><a href="{{ route('fournisseur.invoices') }}">Mes Factures</a></li>
+                        <li><a href="{{ route('support.create') }}">Contacter le Support</a></li>
                     @else
                         <li><a href="/client/order/create">Passer une commande</a></li>
                         <li><a href="/client/orders">Mes Commandes</a></li>
                         <li><a href="{{ route('client.invoices') }}">Mes Factures</a></li>
                         <li><a href="/client/cart">Mon Panier</a></li>
+                        <li><a href="{{ route('support.create') }}">Contacter le Support</a></li>
                     @endif
                     <li>
                         <form action="/logout" method="POST" style="display:inline;">
