@@ -536,7 +536,7 @@
             <div class="card-body" style="padding: 2rem; padding-top: 1rem; flex: 1; display: flex; flex-direction: column;">
                 <h3 style="font-size: 1.6rem; margin-bottom: 1rem; color: #fff;">Transactions Sécurisées</h3>
                 <p style="color: var(--text-muted); margin-bottom: 2rem; line-height: 1.6; flex: 1;">
-                    Vos données commerciales sont précieuses. Notre infrastructure garantit la confidentialité totale de vos prix, clients et historiques de commandes.
+                  Notre infrastructure garantit la confidentialité totale de vos prix, clients et historiques de commandes.
                 </p>
                 <div style="margin-top: auto;">
                     <span style="font-weight: 600; display: inline-flex; align-items: center; gap: 0.5rem; color: var(--success); background: rgba(16, 185, 129, 0.1); padding: 0.4rem 1rem; border-radius: 2rem; border: 1px solid rgba(16, 185, 129, 0.2); font-size: 0.9rem;">✓ Fiabilité garantie</span>
