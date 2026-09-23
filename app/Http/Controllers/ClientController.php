@@ -40,45 +40,35 @@ class ClientController extends Controller
             'products.*' => 'integer|min:0'
         ]);
 
-        $totalPrice = 0;
-        $orderItems = [];
+        $cart = session()->get('cart', []);
+        $itemsAdded = 0;
 
         foreach ($request->products as $productId => $quantity) {
             if ($quantity > 0) {
                 $product = Product::where('id', $productId)->where('fournisseur_id', $request->fournisseur_id)->first();
                 if ($product) {
-                    $totalPrice += $product->price * $quantity;
-                    $orderItems[] = [
-                        'product_id' => $product->id,
-                        'quantity' => $quantity,
-                        'price' => $product->price
-                    ];
-                    // Optionnel: décrémenter le stock
-                    // $product->decrement('stock', $quantity);
+                    if(isset($cart[$product->id])) {
+                        $cart[$product->id]['quantity'] += $quantity;
+                    } else {
+                        $cart[$product->id] = [
+                            "name" => $product->name,
+                            "quantity" => $quantity,
+                            "price" => $product->price,
+                            "image" => $product->image
+                        ];
+                    }
+                    $itemsAdded++;
                 }
             }
         }
 
-        if (count($orderItems) === 0) {
+        if ($itemsAdded === 0) {
             return back()->with('error', 'Veuillez sélectionner au moins un produit avec une quantité valide.');
         }
 
-        $order = Order::create([
-            'client_id' => Auth::id(),
-            'total_price' => $totalPrice,
-            'status' => 'pending'
-        ]);
+        session()->put('cart', $cart);
 
-        foreach ($orderItems as $item) {
-            OrderItem::create([
-                'order_id' => $order->id,
-                'product_id' => $item['product_id'],
-                'quantity' => $item['quantity'],
-                'price' => $item['price']
-            ]);
-        }
-
-        return redirect()->route('client.orders')->with('success', 'Commande passée avec succès auprès du fournisseur!');
+        return redirect()->route('cart.index')->with('success', 'Produits ajoutés au panier automatiquement!');
     }
 
     public function downloadInvoice($id)

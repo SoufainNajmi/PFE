@@ -62,7 +62,7 @@
                 </table>
                 
                 <div style="margin-top: 2rem; display: flex; justify-content: flex-end;">
-                    <button type="submit" class="btn">Confirmer la Commande</button>
+                    <button type="submit" class="btn">Ajouter au panier</button>
                 </div>
             </form>
 
